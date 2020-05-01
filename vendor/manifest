@@ -306,7 +306,7 @@
 			"importpath": "github.com/gorilla/mux",
 			"repository": "https://github.com/gorilla/mux",
 			"vcs": "git",
-			"revision": "757bef944d0f21880861c2dd9c871ca543023cba",
+			"revision": "75dcda0896e109a2a22c9315bca3bb21b87b2ba5",
 			"branch": "master",
 			"notests": true
 		},
@@ -572,6 +572,14 @@
 			"revision": "f94043b3da140c7a735b1f2f286d72d19014b200",
 			"branch": "master",
 			"path": "user",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/newrelic/go-agent",
+			"repository": "https://github.com/newrelic/go-agent",
+			"vcs": "git",
+			"revision": "b9b65ab3d35fb31361c9869fa0788cdb60dc0f4e",
+			"branch": "v3.4.0",
 			"notests": true
 		},
 		{

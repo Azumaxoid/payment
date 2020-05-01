@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+        "os"
 
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/circuitbreaker"
@@ -16,6 +17,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
         "github.com/streadway/handy/breaker"
 	"golang.org/x/net/context"
+	newrelic "github.com/newrelic/go-agent/v3/newrelic"
+	nrgorilla "github.com/newrelic/go-agent/v3/integrations/nrgorilla"
 )
 
 // MakeHTTPHandler mounts the endpoints into a REST-y HTTP handler.
@@ -25,6 +28,19 @@ func MakeHTTPHandler(ctx context.Context, e Endpoints, logger log.Logger, tracer
 		httptransport.ServerErrorLogger(logger),
 		httptransport.ServerErrorEncoder(encodeError),
 	}
+
+	app, err := newrelic.NewApplication(
+		newrelic.ConfigAppName(os.Getenv("NEW_RELIC_APP_NAME")),
+		newrelic.ConfigLicense(os.Getenv("NEW_RELIC_LICENSE_KEY")),
+		newrelic.ConfigDebugLogger(os.Stdout),
+	)
+
+	logger.Log("App Name", os.Getenv("NEW_RELIC_APP_NAME"))
+	logger.Log("Key", os.Getenv("NEW_RELIC_LICENSE_KEY"))
+
+	logger.Log(err)
+
+	r.Use(nrgorilla.Middleware(app))
 
 	r.Methods("POST").Path("/paymentAuth").Handler(httptransport.NewServer(
 		ctx,
